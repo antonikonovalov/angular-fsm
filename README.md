@@ -16,50 +16,18 @@ app.config(['FsmProvider',(FsmProvider)->
         console.debug "Please introduce yourself first!"
         @
 
-      login: (symbol) ->
-        console.debug "Welcome,", symbol.data;
-        @login =  symbol.data;
+      login: (symbol) -> …
 
-        unless @session
-          @session = {}
-
-        unless @session[@login]
-          @session[@login] = []
-
-        @
-
-      quit: ->
-        console.debug "Bye bye!"
-
-        @
+      quit: -> …
 
       say: (symbol) ->
-        index = parseInt(symbol.data)
-        if @session[@login][index]
-          console.debug @session[@login][index]
-        else
-          console.debug "No record"
-
-        @
+        …
 
       remember: (symbol) ->
-        @session[@login].push(symbol.raw)
-
-        @
+       …
 
       normalize:(symbol) ->
-        obj = {}
-        match = symbol.match(/^(\S+)(.*)$/)
-        if match.length > 1
-          obj =
-            symbol: match[1]
-            data: match[2]
-            raw: symbol
-        else
-          obj =
-            symbol: "*"
-            data: symbol
-            raw: symbol
+        …
 
     map:
       init:
