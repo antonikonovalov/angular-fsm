@@ -2,11 +2,15 @@
 
 service = angular.module('fsm.service',[])
 
-class FSM
+class FSMBase
+
   states: {}
 
-  #  constructor: (@initial) ->
-  #    @current = @initial
+  constructor: (@initial) ->
+    console.log "FSMBase constructor =>", @initial
+    @current = @initial
+    console.log "FSMBase finish"
+    @
 
   setInitialState: (initial) ->
     @initial = initial
@@ -47,11 +51,11 @@ class FSM
 
     console.log "Current State ",@current," got symbol ",symbol
 
-    if not state[symbol] and state['*']
+    if not state?[symbol]? and state['*']
       console.log "Unrecognized symbol ", symbol , ", using *"
       symbol = '*'
 
-    state[symbol].action(rawSymbol) if state[symbol].action?
+    @[state[symbol].action](rawSymbol) if @[state[symbol].action]?
 
     if state[symbol].next
       @current = state[symbol].next
@@ -60,7 +64,21 @@ class FSM
 
     @
 
-service.factory 'FSM', [-> FSM]
+service.factory 'FSMBase', [-> FSMBase]
+
+service.factory 'ConstructorFSM', ['FSMBase',(FSMBase) ->
+    {
+      build: (config) ->
+        class FSM extends FSMBase
+          constructor: (@initial,@states) ->
+            super(@initial)
+
+        for fnName, cb of config.actions
+          FSM::[fnName] = cb
+
+        new FSM config.initial, config.map
+    }
+  ]
 
 module = angular.module('fsm',['fsm.service'])
 
@@ -68,19 +86,13 @@ module.provider 'Fsm', [->
     # Private variables
     conf = {}
 
-    # Private constructor
-
     # Public API for configuration
     @config = (config) ->
       conf = config
 
     # Method for instantiating
-    @$get = [
-      'FSM'
-      (FSM) ->
-        console.log "FSM =>", FSM
-        new FSM()
-    ]
+    @$get = ['ConstructorFSM',(ConstructorFSM) -> ConstructorFSM.build(conf)]
+
     @
 
   ]
