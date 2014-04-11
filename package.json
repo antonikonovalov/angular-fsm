@@ -1,6 +1,6 @@
 {
     "name": "angular-fsm",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "devDependencies":{
         "grunt-contrib-uglify":"latest",
         "grunt-conventional-changelog": "~1.1.0",
