@@ -6,18 +6,10 @@ class FSMBase
 
   states: {}
 
-  constructor: (@initial) ->
-    console.log "FSMBase constructor =>", @initial
+  log: () -> @log "FSM: ",arguments if @debug
+
+  constructor: (@initial,@debug=false) ->
     @current = @initial
-    console.log "FSMBase finish"
-    @
-
-  setInitialState: (initial) ->
-    @initial = initial
-    @
-
-  setCurrentState: (current) ->
-    @current = current
     @
 
   reset: () ->
@@ -49,10 +41,10 @@ class FSMBase
 
     symbol = rawSymbol.symbol
 
-    console.log "Current State ",@current," got symbol ",symbol
+    @log "Current State ",@current," got symbol ",symbol
 
     if not state?[symbol]? and state['*']
-      console.log "Unrecognized symbol ", symbol , ", using *"
+      @log "Unrecognized symbol ", symbol , ", using *"
       symbol = '*'
 
     @[state[symbol].action](rawSymbol) if @[state[symbol].action]?
@@ -60,23 +52,24 @@ class FSMBase
     if state[symbol].next
       @current = state[symbol].next
     else
-      console.log "Don't know how to handle symbol ",rawSymbol.symbol
+      @log "Don't know how to handle symbol ",rawSymbol.symbol
 
     @
 
-service.factory 'FSMBase', [-> FSMBase]
+service.factory 'fsm.service.Base', [-> FSMBase]
 
-service.factory 'ConstructorFSM', ['FSMBase',(FSMBase) ->
+service.factory 'fsm.service.Constructor', ['fsm.service.Base',(FSMBase) ->
     {
       build: (config) ->
         class FSM extends FSMBase
-          constructor: (@initial,@states) ->
-            super(@initial)
+          constructor: (@initial,@states,@debug=false) ->
+            super(@initial,@debug)
 
         for fnName, cb of config.actions
           FSM::[fnName] = cb
 
-        new FSM config.initial, config.map
+        # todo: if debug show table states in console
+        new FSM config.initial, config.map, config.debug
     }
   ]
 
@@ -91,7 +84,7 @@ module.provider 'Fsm', [->
       conf = config
 
     # Method for instantiating
-    @$get = ['ConstructorFSM',(ConstructorFSM) -> ConstructorFSM.build(conf)]
+    @$get = ['fsm.service.Constructor',(FSMConstructor) -> FSMConstructor.build(conf)]
 
     @
 

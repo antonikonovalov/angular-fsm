@@ -13,8 +13,12 @@ module.exports = function(grunt) {
                     'dest/angular-fsm.min.js': ['src/fsm.js']
                 }
             }
+        },
+        bump: {
+
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-bump');
 }
