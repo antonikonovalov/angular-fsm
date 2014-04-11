@@ -1,9 +1,25 @@
 {
-    "name": "fsm",
-    "version": "0.0.1",
-    "main": "./dist/fsm.js",
-
-    "dependencies": {
-        "angular": "1.2.17-build.91+sha.d53a787"
-    }
+  "name": "angular-fsm",
+  "version": "0.0.1",
+  "main": "./dist/angular-fsm.min.js",
+  "dependencies": {
+    "angular": "1.2.17-build.91+sha.d53a787"
+  },
+  "homepage": "https://github.com/antonikonovalov/angular-fsm",
+  "authors": [
+    "antoni.konovalov@gmail.com"
+  ],
+  "description": "abstract FSM implementation for angular",
+  "keywords": [
+    "angular",
+    "FSM"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
