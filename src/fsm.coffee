@@ -6,7 +6,7 @@ class FSMBase
 
   states: {}
 
-  log: () -> @log "FSM: ",arguments if @debug
+  log: (all...) -> console.debug "FSM: ",all... if @debug
 
   constructor: (@initial,@debug=false) ->
     @current = @initial
@@ -38,6 +38,7 @@ class FSMBase
   process: (rawSymbol) ->
     state = @states[@current]
     rawSymbol = @normalize(rawSymbol)
+    return unless rawSymbol?.symbol?
 
     symbol = rawSymbol.symbol
 

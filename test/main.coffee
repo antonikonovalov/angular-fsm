@@ -5,8 +5,7 @@ angular.module('chatBotApp')
     '$scope'
     'Fsm'
     ($scope,Fsm) ->
-      console.log "Fsm",Fsm
-      $scope.title = "Hello FSM, I am bot. Commands: *,login,memorize,exit,say,exit"
+      $scope.title = "FSM. Commands: *,login,memorize,exit,say,exit"
       $scope.input = ""
 
       $scope.onSubmit = () ->

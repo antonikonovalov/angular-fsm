@@ -5,13 +5,14 @@ app = angular.module('chatBotApp',['fsm'])
 app.config(['FsmProvider',(FsmProvider)->
   FsmProvider.config(
     initial:'init'
+    debug: true
     actions:
       introduce: ->
-        console.debug "Please introduce yourself first!"
+        @log "Please introduce yourself first!"
         @
 
       login: (symbol) ->
-        console.debug "Welcome,", symbol.data;
+        @log "Welcome,", symbol.data;
         @login =  symbol.data;
 
         unless @session
@@ -23,16 +24,16 @@ app.config(['FsmProvider',(FsmProvider)->
         @
 
       quit: ->
-        console.debug "Bye bye!"
+        @log "Bye bye!"
 
         @
 
       say: (symbol) ->
         index = parseInt(symbol.data)
         if @session[@login][index]
-          console.debug @session[@login][index]
+          @log @session[@login][index]
         else
-          console.debug "No record"
+          @log "No record"
 
         @
 
@@ -42,6 +43,7 @@ app.config(['FsmProvider',(FsmProvider)->
         @
 
       normalize:(symbol) ->
+        return unless symbol
         obj = {}
         match = symbol.match(/^(\S+)(.*)$/)
         if match.length > 1
